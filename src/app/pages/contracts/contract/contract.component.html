@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="table-active" *ngFor="let item of fakeData">
+      <tr class="table-active" *ngFor="let item of contracts$ |async">
         <th scope="row">{{item.contractId}}</th>
         <td class="text-center">{{item.date}}</td>
         <td class="text-center">{{item.companyName}}</td>
@@ -27,7 +27,7 @@
         <td class="text-center">{{item.salary}}</td>
         <td class="text-center">{{item.paymentPeriod}}</td>
         <td class="text-center">{{item.performanceReviewPeriod}}</td>
-        <td class="text-center">{{item.benefits[0].name}}</td>
+        <td class="text-center">{{item.benefits.name}}</td>
         <td class="text-center">{{item.workerId}} </td>
         <td class="text-center">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
@@ -43,3 +43,4 @@
     </tbody>
   </table>
 </div>
+{{contracts$}}

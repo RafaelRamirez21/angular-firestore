@@ -1,4 +1,5 @@
 export interface Contracts{
+  id?:string,
   contractId:string,
   date:Date,
   companyName:string,
@@ -8,9 +9,9 @@ export interface Contracts{
   salary:string,
   paymentPeriod:string,
   performanceReviewPeriod:string,
-  benefits:[{
+  benefits:{
     name:string,
     frequency:string
-  }],
+  },
   workerId:string
 }

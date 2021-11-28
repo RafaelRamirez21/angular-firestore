@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ContractsService } from 'src/app/pages/contracts/contracts.service';
 import { Contracts } from '../../models/contract.interface';
 
 @Component({
@@ -13,7 +14,7 @@ export class ContractFormComponent implements OnInit {
   contract:Contracts; 
   contractForm: FormGroup=new FormGroup({});
   benefits:FormGroup=new FormGroup({})
- constructor(private router:Router,private fb:FormBuilder) { 
+ constructor(private router:Router,private fb:FormBuilder,private contractsSv:ContractsService) { 
    const navigation=this.router.getCurrentNavigation();
    this.contract=navigation?.extras?.state?.['value'];
    this.initForm()
@@ -36,8 +37,8 @@ export class ContractFormComponent implements OnInit {
        paymentPeriod:this.contract.paymentPeriod,
        performanceReviewPeriod:this.contract.performanceReviewPeriod,
        benefits:{
-         name: this.contract.benefits[0].name,
-         frequency:this.contract.benefits[0].frequency
+         name: this.contract.benefits.name,
+         frequency:this.contract.benefits.frequency
        },
        workerId:this.contract.workerId,
      })
@@ -49,6 +50,12 @@ export class ContractFormComponent implements OnInit {
  }
  onSave():void{
  console.log ("saved",this.contractForm.value);
+ if(this.contractForm.valid){
+   const contract=this.contractForm.value;
+   const id=this.contract?.id || ""
+  this.contractsSv.onSaveContract(contract,id);
+  this.contractForm.reset();
+ }
  }
  private initForm():void{
    this.contractForm=this.fb.group({
