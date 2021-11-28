@@ -1,0 +1,51 @@
+<button type="button" class="btn  btn-secondary mt-2" (click)="goBack()">Back</button>
+<div class="card mt-2">
+  <div class="card-header">
+    Contracts details
+  </div>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Contract ID: <h6>{{contract?.contractId}}</h6>
+      </li>
+      <li class="list-group-item">
+        Date: <h6>{{contract?.date}}</h6>
+      </li>
+      <li class="list-group-item">
+        Company: <h6>{{contract?.companyName}}</h6>
+      </li>
+      <li class="list-group-item">
+        State: <h6>{{contract?.state}}</h6>
+      </li>
+      <li class="list-group-item">
+        City: <h6>{{contract?.city}}</h6>
+      </li>
+      <li class="list-group-item">
+        Role: <h6>{{contract?.role}}</h6>
+      </li>
+      <li class="list-group-item">
+        Salary: <h6>{{contract?.salary}}</h6>
+      </li>
+      <li class="list-group-item">
+        Payment Period: <h6>{{contract?.paymentPeriod}}</h6>
+      </li>
+      <li class="list-group-item">
+        performance Review Period: <h6>{{contract?.performanceReviewPeriod}}</h6>
+      </li>
+      <li class="list-group-item">
+        Benefits: <h6>{{contract?.benefits?.[0]?.name}}-{{contract?.benefits?.[0]?.frequency}}</h6>
+      </li>
+      <li class="list-group-item">
+        Worker: <h6>{{contract?.workerId}}</h6>
+      </li>
+    </ul>
+  </div>
+  <div class="btn-group mb-2" role="group">
+    <button type="button" class="btn  btn-outline-info m-1 btn-sm" (click)="onGoToEdit()">Edit</button>
+    <button type="button" class="btn  btn-outline-danger m-1 btn-sm" (click)="onGoToDelete()">Delete</button>
+    <button type="button" class="btn  btn-outline-success m-1 btn-sm" (click)="onGoToGenerate()">Download
+      file</button>
+
+  </div>
+</div>
+{{contract|json}}

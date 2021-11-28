@@ -1,0 +1,45 @@
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">Contract Id</th>
+        <th scope="col" class="text-center">Date</th>
+        <th scope="col" class="text-center">Company</th>
+        <th scope="col" class="text-center">City</th>
+        <th scope="col" class="text-center">State</th>
+        <th scope="col" class="text-center">Role</th>
+        <th scope="col" class="text-center">Salary</th>
+        <th scope="col" class="text-center">Payment Period</th>
+        <th scope="col" class="text-center">Performance Review</th>
+        <th scope="col" class="text-center">Benefits</th>
+        <th scope="col" class="text-center">Worker</th>
+        <th scope="col" class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-active" *ngFor="let item of fakeData">
+        <th scope="row">{{item.contractId}}</th>
+        <td class="text-center">{{item.date}}</td>
+        <td class="text-center">{{item.companyName}}</td>
+        <td class="text-center">{{item.city}}</td>
+        <td class="text-center">{{item.state}}</td>
+        <td class="text-center">{{item.role}}</td>
+        <td class="text-center">{{item.salary}}</td>
+        <td class="text-center">{{item.paymentPeriod}}</td>
+        <td class="text-center">{{item.performanceReviewPeriod}}</td>
+        <td class="text-center">{{item.benefits[0].name}}</td>
+        <td class="text-center">{{item.workerId}} </td>
+        <td class="text-center">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Options</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="onGoToEdit(item)">Edit</a>
+            <a class="dropdown-item" (click)="onGoToView(item)">View</a>
+            <a class="dropdown-item" (click)="onGoToDelete(item)">Delete</a>
+            <a class="dropdown-item" (click)="onGoToGenerate(item)"> document</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
