@@ -19,8 +19,13 @@ export class UserComponent implements OnInit {
   }
 
   onGoToDelete(id:any):any{
-    alert('deleted')
-   
+    try {
+      this.contractsSv.onDeleteWorker(id);
+      alert('deleted');
+      this.router.navigate(['/contracts'])
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 }

@@ -12,12 +12,12 @@
         <th scope="col" class="text-center">Payment Period</th>
         <th scope="col" class="text-center">Performance Review</th>
         <th scope="col" class="text-center">Benefits</th>
-        <th scope="col" class="text-center">Worker</th>
+        <th scope="col" class="text-center">Worker id</th>
         <th scope="col" class="text-center">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="table-active" *ngFor="let item of contracts$ |async">
+      <tr class="table-active" *ngFor="let item of contracts$ |async;index as i">
         <th scope="row">{{item.contractId}}</th>
         <td class="text-center">{{item.date}}</td>
         <td class="text-center">{{item.companyName}}</td>
@@ -28,7 +28,9 @@
         <td class="text-center">{{item.paymentPeriod}}</td>
         <td class="text-center">{{item.performanceReviewPeriod}}</td>
         <td class="text-center">{{item.benefits?.[0]?.name}}</td>
-        <td class="text-center">{{item.workerId}} </td>
+        <ng-container *ngFor="let worker of join$ |async;index as j">
+          <td *ngIf="j===i" class="text-center"> {{worker[0].fullName?worker[0].fullName:'empty'}}</td>
+        </ng-container>
         <td class="text-center">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
             aria-expanded="false">Options</a>

@@ -16,7 +16,7 @@
             aria-expanded="false">Options</a>
           <div class="dropdown-menu">
             <a class="dropdown-item" (click)="onGoToEdit(item)">Edit</a>
-            <a class="dropdown-item" (click)="onGoToDelete(item)">Delete</a>
+            <a class="dropdown-item" (click)="onGoToDelete(item?.id)">Delete</a>
           </div>
         </td>
       </tr>
