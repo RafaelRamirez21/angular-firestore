@@ -27,7 +27,7 @@
         <td class="text-center">{{item.salary}}</td>
         <td class="text-center">{{item.paymentPeriod}}</td>
         <td class="text-center">{{item.performanceReviewPeriod}}</td>
-        <td class="text-center">{{item.benefits.name}}</td>
+        <td class="text-center">{{item.benefits?.[0]?.name}}</td>
         <td class="text-center">{{item.workerId}} </td>
         <td class="text-center">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
@@ -35,7 +35,7 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" (click)="onGoToEdit(item)">Edit</a>
             <a class="dropdown-item" (click)="onGoToView(item)">View</a>
-            <a class="dropdown-item" (click)="onGoToDelete(item)">Delete</a>
+            <a class="dropdown-item" (click)="onGoToDelete(item?.id)">Delete</a>
             <a class="dropdown-item" (click)="onGoToGenerate(item)"> document</a>
           </div>
         </td>
@@ -43,4 +43,3 @@
     </tbody>
   </table>
 </div>
-{{contracts$}}

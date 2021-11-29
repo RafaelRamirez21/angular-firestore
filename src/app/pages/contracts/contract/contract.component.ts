@@ -13,7 +13,7 @@ export class ContractComponent implements OnInit {
   constructor(private router:Router,private contractsSv:ContractsService) { }
 
   ngOnInit(): void {
-    
+   
   }
   onGoToEdit(item:any):void{
   
@@ -23,9 +23,17 @@ export class ContractComponent implements OnInit {
   
     this.router.navigate(['/details'],{ state: { value: item } })
   }
-  onGoToDelete(item:any):void{
-    alert('deleted')
+  onGoToDelete(id:any):any{
+    try {
+      this.contractsSv.onDeleteContract(id);
+      alert('deleted');
+      this.router.navigate(['/contracts'])
+    } catch (error) {
+      console.log(error)
+    }
+   
   }
+
   onGoToGenerate(item:any):void{
     alert('document generated')
   }

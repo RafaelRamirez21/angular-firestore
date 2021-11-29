@@ -32,8 +32,9 @@
       <li class="list-group-item">
         performance Review Period: <h6>{{contract?.performanceReviewPeriod}}</h6>
       </li>
+
       <li class="list-group-item">
-        Benefits: <h6>{{contract?.benefits?.name}}-{{contract?.benefits?.frequency}}</h6>
+        Benefits: <h6 *ngFor="let item of contract.benefits">{{item.name}}-{{item.frequency}}</h6>
       </li>
       <li class="list-group-item">
         Worker: <h6>{{contract?.workerId}}</h6>
@@ -42,10 +43,10 @@
   </div>
   <div class="btn-group mb-2" role="group">
     <button type="button" class="btn  btn-outline-info m-1 btn-sm" (click)="onGoToEdit()">Edit</button>
-    <button type="button" class="btn  btn-outline-danger m-1 btn-sm" (click)="onGoToDelete()">Delete</button>
+    <button type="button" class="btn  btn-outline-danger m-1 btn-sm"
+      (click)="onGoToDelete(contract?.id)">Delete</button>
     <button type="button" class="btn  btn-outline-success m-1 btn-sm" (click)="onGoToGenerate()">Download
       file</button>
 
   </div>
 </div>
-{{contract|json}}

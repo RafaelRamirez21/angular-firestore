@@ -37,12 +37,22 @@
       <input type="text" placeholder="performance Review Period" class="form-control"
         formControlName="performanceReviewPeriod">
     </div>
+    <p>Benefits</p>
+
     <div class="form-group mt-1" formArrayName="benefits">
-      <p>Benefits</p>
-      <input type="text" placeholder="name" class="form-control" formControlName=name>
-      <input type="text" placeholder="frequency" class="form-control" formControlName="frequency">
+
+      <div *ngFor="let benefit of benefits.controls;index as i">
+        <ng-container [formGroupName]="i">
+          <input type="text" placeholder="name" class="form-control" formControlName=name>
+          <input type="text" placeholder="frequency" class="form-control" formControlName="frequency">
+        </ng-container>
+      </div>
     </div>
+    <button type="button" (click)="addBenefit()">Add</button>
   </div>
+
+
+
   <div class="form-row mx-auto">
     <p>worker</p>
     <div class="form-group mt-1">

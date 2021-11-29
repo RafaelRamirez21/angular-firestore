@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { ContractsService } from 'src/app/pages/contracts/contracts.service';
 import { Contracts } from '../../models/contract.interface';
 
@@ -13,8 +15,13 @@ export class ContractFormComponent implements OnInit {
 
   contract:Contracts; 
   contractForm: FormGroup=new FormGroup({});
-  benefits:FormGroup=new FormGroup({})
- constructor(private router:Router,private fb:FormBuilder,private contractsSv:ContractsService) { 
+  // benefits:FormGroup=new FormGroup({})
+
+  
+
+
+  benefits:FormArray=new FormArray([]);
+ constructor(private router:Router,private fb:FormBuilder,private contractsSv:ContractsService,private afs: AngularFirestore) { 
    const navigation=this.router.getCurrentNavigation();
    this.contract=navigation?.extras?.state?.['value'];
    this.initForm()
@@ -26,22 +33,7 @@ export class ContractFormComponent implements OnInit {
    if(typeof this.contract==='undefined'){
      this.router.navigate(['/new'])
    }else{
-     this.contractForm.patchValue({
-       contractId:this.contract.contractId,
-       date:this.contract.date,
-       companyName:this.contract.companyName,
-       city:this.contract.city,
-       state:this.contract.state,
-       role:this.contract.role,
-       salary:this.contract.salary,
-       paymentPeriod:this.contract.paymentPeriod,
-       performanceReviewPeriod:this.contract.performanceReviewPeriod,
-       benefits:{
-         name: this.contract.benefits.name,
-         frequency:this.contract.benefits.frequency
-       },
-       workerId:this.contract.workerId,
-     })
+     this.contractForm.patchValue(this.contract)
 
      
    }
@@ -49,12 +41,13 @@ export class ContractFormComponent implements OnInit {
 
  }
  onSave():void{
+ this.benefits=this.contractForm.get('benefits') as FormArray;
  console.log ("saved",this.contractForm.value);
  if(this.contractForm.valid){
    const contract=this.contractForm.value;
    const id=this.contract?.id || ""
   this.contractsSv.onSaveContract(contract,id);
-  this.contractForm.reset();
+  // this.contractForm.reset();
  }
  }
  private initForm():void{
@@ -68,14 +61,44 @@ export class ContractFormComponent implements OnInit {
      salary:['',[Validators.required]],
      paymentPeriod:['',[Validators.required]],
      performanceReviewPeriod:['',[Validators.required]],
-     benefits:new FormGroup({
-       name: new FormControl(),
-       frequency:new FormControl()
-     }),
+     benefits:this.fb.array([]),
      workerId:['',[Validators.required]],
    })
  }
+
+  createBenefit(): FormGroup {
+    return this.fb.group({
+      name: '',
+      frequency:''
+    })
+  }
+
+  addBenefit():void{
+    this.benefits=this.contractForm.get('benefits') as FormArray;
+    console.log(this.benefits)
+    this.benefits.push(this.createBenefit())
+  }
  goBack():void{
    this.router.navigate(['/contracts'])
  }
+
+
+//  private initForm():void{
+//   this.contractForm=this.fb.group({
+//     contractId:['',[Validators.required]],
+//     date:['',[Validators.required]],
+//     companyName:['',[Validators.required]],
+//     city:['',[Validators.required]],
+//     state:['',[Validators.required]],
+//     role:['',[Validators.required]],
+//     salary:['',[Validators.required]],
+//     paymentPeriod:['',[Validators.required]],
+//     performanceReviewPeriod:['',[Validators.required]],
+//     benefits:new FormGroup({
+//       name: new FormControl(),
+//       frequency:new FormControl()
+//     }),
+//     workerId:['',[Validators.required]],
+//   })
+// }
 }

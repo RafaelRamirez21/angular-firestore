@@ -9,9 +9,9 @@ export interface Contracts{
   salary:string,
   paymentPeriod:string,
   performanceReviewPeriod:string,
-  benefits:{
+  benefits:[{
     name:string,
     frequency:string
-  },
+  }],
   workerId:string
 }

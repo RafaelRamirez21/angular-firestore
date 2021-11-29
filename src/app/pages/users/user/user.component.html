@@ -1,0 +1,25 @@
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col" class="text-center">Worker Id</th>
+        <th scope="col" class="text-center">FullName</th>
+        <th scope="col" class="text-center">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="table-active" *ngFor="let item of workers$ |async">
+        <th scope="row">{{item.workerId}}</th>
+        <td class="text-center">{{item.fullName}}</td>
+        <td class="text-center">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Options</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="onGoToEdit(item)">Edit</a>
+            <a class="dropdown-item" (click)="onGoToDelete(item)">Delete</a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

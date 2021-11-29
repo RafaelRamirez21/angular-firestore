@@ -10,6 +10,8 @@ import{AngularFireModule} from '@angular/fire';
 import{AngularFirestore} from '@angular/fire/firestore';
 
 import { environment } from 'src/environments/environment';
+import { WorkerFormComponent } from './shared/components/worker-form/worker-form.component';
+import { WorkerFormModule } from './shared/components/worker-form/worker-form.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { environment } from 'src/environments/environment';
     AppRoutingModule,
     HeaderModule,
     ContractFormModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    WorkerFormModule
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

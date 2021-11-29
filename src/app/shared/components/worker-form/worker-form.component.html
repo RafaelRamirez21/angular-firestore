@@ -1,0 +1,13 @@
+<button type="button" class="btn  btn-secondary mt-2" (click)="goBack()">Back</button>
+<form class="mt-3 mx-auto col-md-8 offset-md-2" style=" width:40%" (ngSubmit)="onSave()" [formGroup]="workerForm">
+  <div class="form-row mx-auto ">
+    <div class="form-group mt-1 ">
+      <input type="text" placeholder="Worker Id" class="form-control" formControlName="workerId">
+    </div>
+    <div class="form-group mt-1 ">
+      <input type="text" placeholder="FullName" class="form-control" formControlName="fullName">
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-outline-success btn-block mt-3">Save</button>
+</form>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Contracts } from 'src/app/shared/models/contract.interface';
+import { ContractsService } from '../contracts.service';
 
 @Component({
   selector: 'app-details',
@@ -9,7 +10,7 @@ import { Contracts } from 'src/app/shared/models/contract.interface';
 })
 export class DetailsComponent implements OnInit {
 contract:Contracts;
-  constructor(private router:Router) { 
+  constructor(private router:Router,private contractSv:ContractsService) { 
     const navigation=this.router.getCurrentNavigation();
     this.contract=navigation?.extras?.state?.['value'];
   }
@@ -24,8 +25,15 @@ contract:Contracts;
     this.router.navigate(['edit'],{ state: { value: this.contract } })
   }
 
-  onGoToDelete():void{
-    alert('deleted')
+onGoToDelete(id:any):any{
+    try {
+      this.contractSv.onDeleteContract(id);
+      alert('deleted')
+      this.goBack();
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
   onGoToGenerate():void{
     alert('document generated')

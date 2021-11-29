@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Employment Contract</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+    <a class="navbar-brand" [routerLink]="['/contracts']">Employment Contract</a>
+    <button class=" navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
       aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,6 +15,13 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/new']">New contract</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/workers']">Workers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/newWorker']">New worker</a>
+        </li>
+
 
       </ul>
 
