@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ContractRoutingModule } from './contract-routing.module';
 import { ContractComponent } from './contract.component';
-
-
+import { HttpClientModule } from "@angular/common/http";
 @NgModule({
   declarations: [
     ContractComponent
@@ -12,7 +11,8 @@ import { ContractComponent } from './contract.component';
   imports: [
     CommonModule,
     ContractRoutingModule,
-    
+    HttpClientModule
+   
   ]
 })
 export class ContractModule { }

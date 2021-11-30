@@ -3,7 +3,11 @@ import { NavigationExtras, Router } from '@angular/router';
 import { first, map } from 'rxjs/operators';
 import { Workers } from 'src/app/shared/models/worker.interface';
 import { ContractsService } from '../contracts.service';
-
+import { Packer } from "docx";
+import * as fs from "file-saver";
+import { DocumentCreator } from "./contract-generator";
+import { experiences, education, skills, achievements } from "./data";
+import { Contracts } from 'src/app/shared/models/contract.interface';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -14,6 +18,7 @@ export class ContractComponent implements OnInit {
   join$=this.contractsSv.join;
   workers$=this.contractsSv.workers;
   workers:Workers[] =[]
+  contracts:Contracts[]=[]
   
    
 
@@ -22,6 +27,7 @@ export class ContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.workers$.subscribe(worker => this.workers=worker as Workers[]);
+    this.contracts$.subscribe(contract => this.contracts=contract as Contracts[]);
  
   }
   onGoToEdit(item:any):void{
@@ -43,23 +49,18 @@ export class ContractComponent implements OnInit {
    
   }
 
-  onGoToGenerate(item:any):void{
-    alert('document generated')
-    
-  }
-  updateName(id:any):any{
-    try {
-      console.log(this.workers)
-      // this.workers.map(worker=>{
-      //   console.log(worker)
-      // }
-      // )
-      return 'hi'
-      }    
-     
-     catch (error) {
-      console.log(error)
-    }
+  public onGoToGenerate(item:any,name:any):void{
+    const documentCreator = new DocumentCreator();
+    const doc = documentCreator.create([
+      item,
+      name,
+    ]);
+
+    Packer.toBlob(doc).then(blob => {
+      console.log(blob);
+      fs.saveAs(blob, "example.docx");
+      console.log("Document created successfully");
+    });
   }
 
 }
