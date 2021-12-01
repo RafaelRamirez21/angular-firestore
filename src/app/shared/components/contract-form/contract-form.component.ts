@@ -47,7 +47,8 @@ export class ContractFormComponent implements OnInit {
    const contract=this.contractForm.value;
    const id=this.contract?.id || ""
   this.contractsSv.onSaveContract(contract,id);
-  // this.contractForm.reset();
+  alert('user added')
+  this.contractForm.reset();
  }
  }
  private initForm():void{

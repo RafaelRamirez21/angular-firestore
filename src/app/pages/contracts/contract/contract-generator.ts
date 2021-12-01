@@ -1,11 +1,13 @@
-import { style } from "@angular/animations";
-import { HttpClient } from "@angular/common/http";
+import { imageLogo } from "./image.const";
 import {
   AlignmentType,
   BorderStyle,
   convertInchesToTwip,
   Document,
+  Footer,
+  Header,
   HeadingLevel,
+  IImageOptions,
   ImageRun,
   LevelFormat,
   Media,
@@ -21,24 +23,15 @@ import {
   VerticalAlign,
   WidthType
 } from "docx";
+import { DomSanitizer } from "@angular/platform-browser";
 
-arrayBuffer:ArrayBuffer
-class callHttp {
-  constructor(private http: HttpClient) {}
-}
+
 
 export class DocumentCreator {
   
   //tslint:disable-next-line: typedef
-  public create([item,name]:any): Document {
-     const bName:any[]=[]
-     const bFrequency:any[]=[]
-     item.benefits.map((benefit: { name: Paragraph;frequency:Paragraph })=>{
-       bName.push(new Paragraph(`${benefit.name}`))
-       bFrequency.push(new Paragraph(`${benefit.frequency}`))
-     })
-     console.log(bName)
-     bName.forEach(ele=>new Paragraph(`${ele}`));
+  public create([item,name,workers,contract]:any): Document {
+
      const month=this.getMonthFromInt(item.date.slice(5,7));
     const document = new Document({
       styles: {
@@ -60,7 +53,7 @@ export class DocumentCreator {
             },
             heading2: {
                 run: {
-                    size: 26,
+                    size: 32,
                     bold: true,
 
                 },
@@ -89,13 +82,13 @@ export class DocumentCreator {
                 }
             },
             {
-                id: "wellSpaced",
-                name: "Well Spaced",
-                basedOn: "Normal",
-                quickFormat: true,
-                paragraph: {
-                    spacing: { line: 276, before: 20 * 72 * 0.1, after: 20 * 72 * 0.05 },
-                },
+              id: "aside-2",
+              name: "Aside-1",
+              run: {
+                  font: "Calibri",
+                  size: 24
+                
+              }
             },
         ],
     },
@@ -114,9 +107,26 @@ export class DocumentCreator {
             },
         ],
     },sections: [
-        {
+        {headers:{
+          default:new Header({
+            children:[            new Paragraph({
+              children: [
+                new ImageRun({
+                  data: Uint8Array.from(atob(imageLogo), c =>
+                    c.charCodeAt(0)
+                  ),
+                  transformation: {
+                    width: 95,
+                    height: 70
+                  }
+                })
+              ]
+            }),]
+          })
+        },
           children: [
-            this.createTitle(`Employment Contract No.${item.workerId}`),
+
+            this.createTitle(`Employment Contract No.${item.contractId}`),
             this.createIntro(`This contract, dated on the ${item.date.slice(8,10)} day of ${month} in the year ${item.date.slice(0,4)}, is made between ${item.companyName} and ${name} of ${item.city}, ${item.state}. This document constitutes an employment agreement between these two parties and is governed by the laws of ${item.state}`,"WHEREAS the Employer desires to retain the services of the Employee, and the Employee desires to render such services, these terms and conditions are set forth.","IN CONSIDERATION of this mutual understanding, the parties agree to the following terms and conditions:") , 
 
             this.createHeading("1. Employment"),
@@ -141,72 +151,98 @@ export class DocumentCreator {
             this.createParagraph(`As compensation for the services provided, the Employee shall be paid a wage of $${item.salary} ${item.paymentPeriod} and will be subject to a(n) ${item.performanceReviewPeriod} performance review. All payments shall be subject to mandatory employment deductions (State & Federal Taxes, Social Security, Medicare).`),
 
             this.createHeading("4. Benefits"),
-            
-            
-              new Table({
-                rows: [
-                    new TableRow({
-                        children: [
-                            new TableCell({
-                                children: [new Paragraph({text:"Benefits",alignment:AlignmentType.CENTER,style:"aside"})],
-                                
-                            }),
-                        
-                            new TableCell({
-                                children: [new Paragraph({text:"Frequency",alignment:AlignmentType.CENTER,style:"aside"})],
-                            }),
-                        ],
-                    }),
-                    // ...item.benefits.map((benefit: { name: any; frequency: any; })=>{
-   
-                    // })
-                    new TableRow({
-                      children: [
-                          new TableCell({
-                              children: bName,
-                          }),
-                          new TableCell({
-                              children:bFrequency,
-                          }),
-                      ],
-                  })
-           
-                ],
+                      
+          new Table({
+                rows: this.generateRow(item.benefits),
                 width: {
                   size: 60,
                   type: WidthType.PERCENTAGE
-              },
-              borders:{
-                top: {
-                  style:BorderStyle.SINGLE,size:1,color:"000"
-                },
-                bottom: {
-                  style:BorderStyle.SINGLE,size:1,color:"000"
-                },
-                left: {
-                  style:BorderStyle.SINGLE,size:1,color:"000"
-                },
-                right: {
-                  style:BorderStyle.SINGLE,size:1,color:"000"
-                },
-                
               }
               ,
               alignment:AlignmentType.CENTER
-            },
-              
-              
-              
+            }
               ),
+   
           
   
-          ]
+          ],
+          footers:{
+            default:new Footer({
+              children:[
+                new Table({
+                  rows:[
+                    new TableRow({
+                      children: [
+                          new TableCell({
+                              children: [new Paragraph({text:"Web.com",alignment:AlignmentType.CENTER})],
+                              verticalAlign:VerticalAlign.CENTER
+                              
+                          }),
+                      
+                          new TableCell({
+                              children: [new Paragraph({text:"4860 Alexander Avenue",alignment:AlignmentType.CENTER}),new Paragraph({text:"San Jose, CA 95131",alignment:AlignmentType.CENTER})],
+                              verticalAlign:VerticalAlign.CENTER
+                          }),
+                          new TableCell({
+                              children: [new Paragraph({text:"+1 925-588-6881",alignment:AlignmentType.CENTER})],
+                              verticalAlign:VerticalAlign.CENTER
+                          }),
+                      ],
+                  })
+                  ],
+                  width: {
+                    size: 100,
+                    type: WidthType.PERCENTAGE
+                }
+                ,
+                alignment:AlignmentType.CENTER
+
+                })
+              ]
+            })
+          }
         }
       ]
     });
 
     return document;
   }
+  public generateRow(benefits: { name: any; frequency: any; }[]){
+    const tableRow:TableRow[]=[]
+    tableRow.push(   
+     new TableRow({
+      children: [
+          new TableCell({
+              children: [new Paragraph({text:"Benefits",alignment:AlignmentType.CENTER,style:"aside"})],
+              
+          }),
+      
+          new TableCell({
+              children: [new Paragraph({text:"Frequency",alignment:AlignmentType.CENTER,style:"aside"})],
+          }),
+      ],
+  }));
+    benefits.map((benefit: { name: any; frequency: any; })=>(
+     
+      tableRow.push( 
+        new TableRow({
+          children: [
+              new TableCell({
+                  children:[new Paragraph({text:`${benefit.name}`,alignment:AlignmentType.CENTER,style:"aside-2"})],
+              }),
+              new TableCell({
+                  children:[new Paragraph({text:`${benefit.frequency}`,alignment:AlignmentType.CENTER,style:"aside-2"})],
+              }),
+          ],
+      })
+        )
+    ))
+
+      return tableRow
+  }
+
+
+
 
   public createContactInfo(
     phoneNumber: string,
@@ -298,6 +334,7 @@ export class DocumentCreator {
       ],alignment:AlignmentType.JUSTIFIED
     });
   }
+  
 
   public createParagraph(text: string): Paragraph {
     return new Paragraph({
@@ -344,7 +381,5 @@ export class DocumentCreator {
     }
   }
 }
-function base64(base64: any): string | Buffer | Uint8Array | ArrayBuffer {
-  throw new Error("Function not implemented.");
-}
+
 
