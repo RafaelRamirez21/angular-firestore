@@ -29,7 +29,8 @@
         <td class="text-center">{{item.performanceReviewPeriod}}</td>
         <td class="text-center">{{item.benefits?.[0]?.name}}</td>
         <ng-container *ngFor="let worker of join$ |async;index as j">
-          <td *ngIf="j===i" class="text-center"> {{worker[0].fullName?worker[0].fullName:'empty'}}</td>
+          <td *ngIf="j===i" class="text-center"> <span *ngIf="worker[0]?.fullName">{{worker[0]?.fullName}}</span><span
+              *ngIf="!worker[0]?.fullName"> Not registered</span></td>
         </ng-container>
         <td class="text-center">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
@@ -39,11 +40,43 @@
             <a class="dropdown-item" (click)="onGoToView(item)">View</a>
             <a class="dropdown-item" (click)="onGoToDelete(item?.id)">Delete</a>
             <ng-container *ngFor="let worker of join$ |async;index as j">
-              <a *ngIf="j===i" class="dropdown-item" (click)="onGoToGenerate(item,worker[0].fullName)"> document</a>
+              <a *ngIf="j===i" class="dropdown-item" (click)="openModal(item,worker[0]?.fullName)"> document</a>
+              <!-- <a *ngIf="j===i" class="dropdown-item" (click)="onGoToGenerate(item,worker[0]?.fullName)"> document</a> -->
             </ng-container>
+
           </div>
         </td>
       </tr>
     </tbody>
   </table>
+
+
+</div>
+
+
+<div class="modal-window" *ngIf="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Insert signature</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="formFile-worker" class="form-label mt-4">Worker signature : </label>
+          <input (change)="handleFileSelect($event)" type="file" id="formFile-worker">
+          <br>
+          <label for="formFile" class="form-label mt-4">Company signature :</label>
+          <input (change)="handleFileSelect($event)" type="file" id="formFile">
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="onGoToGenerate()">Download</button>
+
+      </div>
+    </div>
+  </div>
 </div>
